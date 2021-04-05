@@ -1,12 +1,13 @@
-
-import kotlinx.coroutines.launch
-import retrofit2.Response
-import java.io.IOException
-import androidx.lifecycle.LiveData
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
+import kotlinx.coroutines.launch
+import retrofit2.Response
+import java.io.IOException
 
 
 class MyViewModel:ViewModel() {
@@ -48,6 +49,7 @@ class MyViewModel:ViewModel() {
     private suspend fun safeWeatherByLocationFetch(model: WeatherRepository,lat: String,lon: String) {
         weatherByLocation.postValue(Resource.loading(null))
         try {
+
             val response = model.getWeatherByLocation(lat,lon)
             weatherByLocation.postValue(handleWeatherResponse(response))
         } catch (t:Throwable){
@@ -63,8 +65,6 @@ class MyViewModel:ViewModel() {
     private fun handleWeatherResponse(response: Response<ResponseWeather>): Resource<ResponseWeather>? {
         return if (response.isSuccessful) Resource.success(response.body()) else Resource.error(null,"Error: ${response.errorBody()}")
     }
-
-
 
 
 

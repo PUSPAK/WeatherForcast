@@ -10,10 +10,15 @@ import WeatherRepository
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -34,6 +39,9 @@ class MainActivity : AppCompatActivity() {
     private var lat:String?=null
     private var lon:String?=null
     private var city:String?=null
+    var handler: Handler = Handler()
+    var runnable: Runnable? = null
+    var delay = 7200000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +58,19 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.isGPSEnabled = isGPSEnable
             }
         })
+       if(Companion.isconnectedToWifi(applicationContext))
+        {
+            handler.postDelayed(Runnable {
+                handler.postDelayed(runnable!!, delay.toLong())
+                setUpObservers()            }.also { runnable = it }, delay.toLong())
 
-        setUpObservers()
+        }
+        else
+       {
+           setUpObservers()
+       }
+
+
     }
 
     override fun onStart() {
@@ -190,8 +209,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
+    companion object {
+        private fun isconnectedToWifi(context: Context): Boolean {
+            val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                    ?: return false
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val network = connectivityManager.activeNetwork
+                val capabilities =
+                    connectivityManager.getNetworkCapabilities(network)
+                        ?: return false
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            } else {
+                val networkInfo =
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                        ?: return false
+                networkInfo.isConnected
+            }
+        }
+    }
 
 
 }
