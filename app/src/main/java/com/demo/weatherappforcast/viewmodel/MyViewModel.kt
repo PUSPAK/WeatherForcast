@@ -17,7 +17,6 @@ class MyViewModel:ViewModel() {
     //location live data
     val locationLiveData = MutableLiveData<LocationData>()
     val locationLiveDataFailure = MutableLiveData<String>()
-
     //weatherByLocation live data
     val weatherByLocation = MutableLiveData<Resource<ResponseWeather>>()
 

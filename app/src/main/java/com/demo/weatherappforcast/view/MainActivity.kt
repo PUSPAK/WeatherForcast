@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         model = LocationProvider(this)
         viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
         weatherRepo = WeatherRepository()
