@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     var runnable: Runnable? = null
     var delay = 7200000
 
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -28,7 +28,6 @@ class MyViewModel:ViewModel() {
             override fun onRequestCompleted(data: LocationData) {
                 locationLiveData.postValue(data)
             }
-
             override fun onRequestFailed(errorMessage: String?) {
                 locationLiveDataFailure.postValue(errorMessage)
             }
